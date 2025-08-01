@@ -3,7 +3,6 @@ package message.response;
 import lombok.Getter;
 import lombok.Setter;
 import message.request.RequestMessage;
-import message.request.header.RequestHeader;
 import message.response.header.ResponseHeader;
 import message.response.header.ResponseHeaderV0;
 

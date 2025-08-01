@@ -21,21 +21,16 @@ public class Server {
     public void start() throws IOException {
         while (true) {
             Socket clientSocket = serverSocket.accept();
-            RequestMessage requestMessage = null;
-            try(InputStream inputStream = clientSocket.getInputStream()) {
+            try(clientSocket;
+                InputStream inputStream = clientSocket.getInputStream();
+                OutputStream outputStream = clientSocket.getOutputStream()) {
                 byte[] requestData = inputStream.readAllBytes();
-                requestMessage = RequestParser.parseRequest(requestData);
+                RequestMessage requestMessage = RequestParser.parseRequest(requestData);
+                ResponseMessage responseMessage = new ResponseMessage(requestMessage);
+                outputStream.write(responseMessage.getMessage());
             } catch (Exception ex) {
                 log.error(ex.getMessage(), ex);
             }
-            OutputStream outputStream = clientSocket.getOutputStream();
-            if (requestMessage == null) {
-                log.error("Failed to parse request message");
-            }
-            ResponseMessage responseMessage = new ResponseMessage(requestMessage);
-            outputStream.write(responseMessage.getMessage());
-            outputStream.close();
-            clientSocket.close();
         }
     }
 
