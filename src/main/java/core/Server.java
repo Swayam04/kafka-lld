@@ -24,8 +24,11 @@ public class Server {
             try(clientSocket;
                 InputStream inputStream = clientSocket.getInputStream();
                 OutputStream outputStream = clientSocket.getOutputStream()) {
-                byte[] requestData = inputStream.readAllBytes();
-                RequestMessage requestMessage = RequestParser.parseRequest(requestData);
+                DataInputStream dataInputStream = new DataInputStream(inputStream);
+                int messageSize = dataInputStream.readInt();
+                byte[] requestPayload = new byte[messageSize];
+                dataInputStream.readFully(requestPayload);
+                RequestMessage requestMessage = RequestParser.parseRequest(requestPayload);
                 ResponseMessage responseMessage = new ResponseMessage(requestMessage);
                 outputStream.write(responseMessage.getMessage());
             } catch (Exception ex) {
