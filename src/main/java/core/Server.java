@@ -8,6 +8,7 @@ import message.response.ResponseMessage;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 
 @Slf4j
 public class Server {
@@ -26,15 +27,21 @@ public class Server {
                 OutputStream outputStream = clientSocket.getOutputStream()) {
                 DataInputStream dataInputStream = new DataInputStream(inputStream);
                 int messageSize = dataInputStream.readInt();
-                byte[] requestPayload = new byte[messageSize];
-                dataInputStream.readFully(requestPayload);
-                RequestMessage requestMessage = RequestParser.parseRequest(requestPayload);
+
+                byte[] payload = dataInputStream.readNBytes(messageSize);
+                ByteBuffer requestBuffer = ByteBuffer.allocate(4 + messageSize);
+                requestBuffer.putInt(messageSize);
+                requestBuffer.put(payload);
+                byte[] requestData = requestBuffer.array();
+
+                RequestMessage requestMessage = RequestParser.parseRequest(requestData);
+
                 ResponseMessage responseMessage = new ResponseMessage(requestMessage);
                 outputStream.write(responseMessage.getMessage());
+
             } catch (Exception ex) {
-                log.error(ex.getMessage(), ex);
+                log.error("Error processing client request", ex);
             }
         }
     }
-
 }

@@ -50,7 +50,7 @@ public class RequestParser {
         long result = 0;
         int shift = 0;
         byte currentByte;
-        for (int i = 0; i < 5; i++) { // 32-bit VarInt is at most 5 bytes
+        for (int i = 0; i < 5; i++) {
             currentByte = buffer.get();
             result |= (long) (currentByte & 0x7F) << shift;
             if ((currentByte & 0x80) == 0) {

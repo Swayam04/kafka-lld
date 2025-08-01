@@ -21,11 +21,11 @@ public class ResponseMessage {
     }
 
     private int getResponseMessageSize() {
-        return 4 + responseHeader.getBytes().length;
+        return responseHeader.getBytes().length;
     }
 
     public byte[] getMessage() {
-        ByteBuffer buffer = ByteBuffer.allocate(this.messageSize);
+        ByteBuffer buffer = ByteBuffer.allocate(4 + this.messageSize);
         buffer.putInt(this.messageSize);
         buffer.put(responseHeader.getBytes());
         return buffer.array();
