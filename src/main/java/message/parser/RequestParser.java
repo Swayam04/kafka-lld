@@ -14,7 +14,7 @@ public class RequestParser {
         RequestMessage requestMessage = new RequestMessage();
         requestMessage.setMessageSize(buffer.getInt());
         requestMessage.setRequestHeader(parseRequestHeader(buffer));
-        return  requestMessage;
+        return requestMessage;
     }
 
     private static RequestHeader parseRequestHeader(ByteBuffer buffer) {
@@ -33,7 +33,7 @@ public class RequestParser {
             }
             requestHeader.setClientId(new String(clientIdBytes, StandardCharsets.UTF_8));
         }
-        int tagBufferLength = buffer.getInt() - 1;
+        int tagBufferLength = ((int) readVarint(buffer)) - 1;
         if (tagBufferLength >= 0) {
             byte[] tagBuffer = new byte[tagBufferLength];
             try {
@@ -44,6 +44,21 @@ public class RequestParser {
             requestHeader.setTagBuffer(tagBuffer);
         }
         return requestHeader;
+    }
+
+    private static long readVarint(ByteBuffer buffer) {
+        long result = 0;
+        int shift = 0;
+        byte currentByte;
+        for (int i = 0; i < 5; i++) { // 32-bit VarInt is at most 5 bytes
+            currentByte = buffer.get();
+            result |= (long) (currentByte & 0x7F) << shift;
+            if ((currentByte & 0x80) == 0) {
+                return result;
+            }
+            shift += 7;
+        }
+        throw new IllegalArgumentException("Malformed VarInt");
     }
 
 }
