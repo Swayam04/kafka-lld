@@ -1,15 +1,34 @@
-package message;
+package message.response;
+
+import lombok.Getter;
+import lombok.Setter;
+import message.request.RequestMessage;
+import message.request.header.RequestHeader;
+import message.response.header.ResponseHeader;
+import message.response.header.ResponseHeaderV0;
 
 import java.nio.ByteBuffer;
 
+@Getter
+@Setter
 public class ResponseMessage {
 
-    public static byte[] getMessage() {
+    private int messageSize;
+    private ResponseHeader responseHeader;
+
+    public ResponseMessage(RequestMessage requestMessage) {
+        this.responseHeader = new ResponseHeaderV0(requestMessage);
+        this.messageSize = getResponseMessageSize();
+    }
+
+    private int getResponseMessageSize() {
+        return 4 + responseHeader.getBytes().length;
+    }
+
+    public byte[] getMessage() {
         ByteBuffer buffer = ByteBuffer.allocate(512);
-        int messageSize = 0;
-        buffer.putInt(messageSize);
-        int correlationId = 7;
-        buffer.putInt(correlationId);
+        buffer.putInt(this.messageSize);
+        buffer.put(responseHeader.getBytes());
         return buffer.array();
     }
 }

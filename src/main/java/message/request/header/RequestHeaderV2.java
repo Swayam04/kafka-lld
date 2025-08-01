@@ -1,4 +1,13 @@
 package message.request.header;
 
-public class RequestHeaderV2 {
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class RequestHeaderV2 extends RequestHeader {
+
+    private String clientId;
+    private byte[] tagBuffer;
+
 }
