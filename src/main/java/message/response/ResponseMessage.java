@@ -25,7 +25,7 @@ public class ResponseMessage {
     }
 
     public byte[] getMessage() {
-        ByteBuffer buffer = ByteBuffer.allocate(512);
+        ByteBuffer buffer = ByteBuffer.allocate(this.messageSize);
         buffer.putInt(this.messageSize);
         buffer.put(responseHeader.getBytes());
         return buffer.array();
