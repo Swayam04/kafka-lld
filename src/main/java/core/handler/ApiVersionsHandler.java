@@ -38,9 +38,6 @@ public class ApiVersionsHandler implements RequestHandler {
     }
 
     private RequestMessage validateAndParseRequest(RequestInfo requestInfo) throws ApiException {
-        if(!supportedVersions().contains(requestInfo.requestApiVersion())) {
-            throw new UnsupportedVersionException();
-        }
         this.schemaSet = apiVersionsSchema.forVersion(requestInfo.requestApiVersion());
         return Parser.parseMessage(requestInfo, schemaSet.requestHeaderSchema(), schemaSet.requestBodySchema());
     }

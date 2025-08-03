@@ -1,5 +1,7 @@
 package schema;
 
+import exceptions.UnsupportedVersionException;
+
 import java.util.*;
 
 public class ApiVersionsApiSchema implements ApiSchema {
@@ -58,7 +60,7 @@ public class ApiVersionsApiSchema implements ApiSchema {
         if (versionedSchemas.containsKey(apiVersion)) {
             return versionedSchemas.get(apiVersion);
         } else {
-            throw new IllegalArgumentException("Unsupported API version: " + apiVersion);
+            throw new UnsupportedVersionException();
         }
     }
 }

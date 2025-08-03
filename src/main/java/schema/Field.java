@@ -12,6 +12,10 @@ public record Field(String name, DataType type, VersionRange validVersions, Opti
         this(name, type, parseVersions(versions), Optional.empty(), nestedSchema);
     }
 
+    public Field(String name, DataType type, String versions, int tag) {
+        this(name, type, parseVersions(versions), Optional.of(tag), null);
+    }
+
     private  static VersionRange parseVersions(String versions) {
         if (versions.contains("+")) {
             return VersionRange.since(Short.parseShort(versions.replace("+", "")));
