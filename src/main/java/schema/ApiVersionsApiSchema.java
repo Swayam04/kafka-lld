@@ -1,8 +1,6 @@
 package schema;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class ApiVersionsApiSchema implements ApiSchema {
     private final Map<Short, SchemaSet> versionedSchemas = new HashMap<>();
@@ -48,6 +46,11 @@ public class ApiVersionsApiSchema implements ApiSchema {
     @Override
     public short apiKey() {
         return 18;
+    }
+
+    public VersionRange versionRange() {
+        Set<Short> versions = versionedSchemas.keySet();
+        return VersionRange.of(Collections.min(versions), Collections.max(versions));
     }
 
     @Override

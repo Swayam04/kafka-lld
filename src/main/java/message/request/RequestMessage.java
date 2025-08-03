@@ -1,13 +1,12 @@
 package message.request;
 
-import lombok.Getter;
-import lombok.Setter;
-import message.request.header.RequestHeader;
+import util.Struct;
 
-@Getter
-@Setter
-public class RequestMessage {
 
-    private int messageSize;
-    private RequestHeader requestHeader;
+public record RequestMessage(Struct requestHeader, Struct requestBody) {
+
+    public RequestMessage(Struct requestHeader) {
+        this(requestHeader, null);
+    }
+
 }

@@ -8,13 +8,12 @@ import message.response.ResponseMessage;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 
 @Slf4j
-public class Server {
+public class Broker {
     private final ServerSocket serverSocket;
 
-    public Server(int port) throws IOException {
+    public Broker(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         serverSocket.setReuseAddress(true);
     }
