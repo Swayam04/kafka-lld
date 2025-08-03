@@ -9,10 +9,10 @@ import java.nio.charset.StandardCharsets;
 
 public class RequestParser {
 
-    public static RequestMessage parseRequest(byte[] data) {
-        ByteBuffer buffer = ByteBuffer.wrap(data);
+    public static RequestMessage parseRequest(int messageSize, byte[] data) {
         RequestMessage requestMessage = new RequestMessage();
-        requestMessage.setMessageSize(buffer.getInt());
+        requestMessage.setMessageSize(messageSize);
+        ByteBuffer buffer = ByteBuffer.wrap(data);
         requestMessage.setRequestHeader(parseRequestHeader(buffer));
         return requestMessage;
     }
